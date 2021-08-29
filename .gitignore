@@ -1,0 +1,12 @@
+node_modules
+
+yarn.lock
+yarn-error.log
+
+.editorconfig
+.env
+.vscode
+.idea
+temp
+tmp
+**/workspace.xml
