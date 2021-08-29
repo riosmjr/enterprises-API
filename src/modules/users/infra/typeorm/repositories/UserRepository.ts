@@ -3,7 +3,7 @@ import { getRepository, Repository } from 'typeorm';
 import IUsersRepository from '../../../repositories/IUsersRepository';
 
 import User from '../entities/Users';
-import {ICreateUserDTO} from "../../../dtos/IUserDTO";
+import {ICreateUserDTO, IUpdateUserDTO} from "../../../dtos/IUserDTO";
 
 export class UsersRepository implements IUsersRepository {
     private ormRepository: Repository<User>;
@@ -18,6 +18,12 @@ export class UsersRepository implements IUsersRepository {
 
     public async createUser(data: ICreateUserDTO): Promise<User> {
         const user = this.ormRepository.create(data);
+        await this.ormRepository.save(user);
+        return user;
+    }
+
+    public async updateUser(User: User, data: IUpdateUserDTO): Promise<User> {
+        const user = this.ormRepository.merge(User, data);
         await this.ormRepository.save(user);
         return user;
     }

@@ -9,7 +9,7 @@ usersRouter.get(
     '/:user_id',
     celebrate({
         [Segments.PARAMS]: {
-            user_id: Joi.string().required()
+            user_id: Joi.string().uuid({ version: 'uuidv4' }).required()
         }
     }),
     userController.getUserById,
@@ -24,12 +24,32 @@ usersRouter.post(
             password: Joi.string().required(),
             birth_at: Joi.date().required(),
             is_active: Joi.boolean().default(true),
-            city_id: Joi.number().integer().required(),
-            schooling_id: Joi.number().integer().required(),
-            profile_id: Joi.number().integer().required(),
+            city_id: Joi.number().integer().positive().required().max(5564),
+            schooling_id: Joi.number().integer().positive().required().max(7),
+            profile_id: Joi.number().integer().positive().required().max(4),
         }
     }),
     userController.createUser,
+);
+
+usersRouter.put(
+    '/:user_id',
+    celebrate({
+        [Segments.PARAMS]: {
+            user_id: Joi.string().uuid({ version: 'uuidv4' }).required()
+        },
+        [Segments.BODY]: {
+            name: Joi.string(),
+            email: Joi.string(),
+            password: Joi.string(),
+            birth_at: Joi.date(),
+            is_active: Joi.boolean(),
+            city_id: Joi.number().integer().positive().max(5564),
+            schooling_id: Joi.number().integer().positive().max(7),
+            profile_id: Joi.number().integer().positive().max(4),
+        }
+    }),
+    userController.updateUser,
 );
 
 export default usersRouter;
