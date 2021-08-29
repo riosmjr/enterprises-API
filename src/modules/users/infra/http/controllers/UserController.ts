@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
-import {GetUserByIdService, CreateUserService, UpdateUserService, DeleteUserService} from "../../../services";
+import {GetUserByIdService, GetAllUsersService, CreateUserService, UpdateUserService, DeleteUserService} from "../../../services";
 
 export default class UserController {
     public async getUserById(request: Request, response: Response): Promise<Response> {
@@ -9,6 +9,15 @@ export default class UserController {
 
         const getUser = container.resolve(GetUserByIdService);
         const user = await getUser.execute(user_id);
+
+        return response.json(classToClass(user));
+    }
+
+    public async getAllUsers(request: Request, response: Response): Promise<Response> {
+        const params  = request.query;
+
+        const getUser = container.resolve(GetAllUsersService);
+        const user = await getUser.execute(params);
 
         return response.json(classToClass(user));
     }

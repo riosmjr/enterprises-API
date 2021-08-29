@@ -19,3 +19,14 @@ export interface IUpdateUserDTO {
     schooling_id?: integer;
     profile_id?: integer;
 }
+
+export interface IFiltersGetAllUsersDTO {
+    name?: string;
+    email?: string;
+    birth_at?: Date;
+    is_active?: boolean;
+    city_id?: integer;
+    state_id?: integer;
+    schooling_id?: integer;
+    profile_id?: integer;
+}

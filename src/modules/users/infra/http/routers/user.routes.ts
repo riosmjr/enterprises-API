@@ -15,6 +15,23 @@ usersRouter.get(
     userController.getUserById,
 );
 
+usersRouter.get(
+    '',
+    celebrate({
+        [Segments.QUERY]: {
+            name: Joi.string(),
+            email: Joi.string(),
+            birth_at: Joi.date(),
+            is_active: Joi.boolean(),
+            city_id: Joi.number().integer().positive().max(5564),
+            schooling_id: Joi.number().integer().positive().max(7),
+            state_id: Joi.number().integer().positive().max(28),
+            profile_id: Joi.number().integer().positive().max(4),
+        }
+    }),
+    userController.getAllUsers,
+);
+
 usersRouter.post(
     '',
     celebrate({
