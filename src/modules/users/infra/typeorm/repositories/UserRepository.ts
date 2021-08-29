@@ -27,6 +27,12 @@ export class UsersRepository implements IUsersRepository {
         await this.ormRepository.save(user);
         return user;
     }
+
+    public async deleteUser(User: User): Promise<User> {
+        const user = this.ormRepository.merge(User, {is_active: false, updated_at: new Date(), deleted_at: new Date()});
+        await this.ormRepository.save(user);
+        return user;
+    }
 }
 
 export default UsersRepository;

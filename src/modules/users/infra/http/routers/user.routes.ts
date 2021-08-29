@@ -52,4 +52,14 @@ usersRouter.put(
     userController.updateUser,
 );
 
+usersRouter.delete(
+    '/:user_id',
+    celebrate({
+        [Segments.PARAMS]: {
+            user_id: Joi.string().uuid({ version: 'uuidv4' }).required()
+        },
+    }),
+    userController.deleteUser,
+);
+
 export default usersRouter;

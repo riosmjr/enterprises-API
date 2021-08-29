@@ -5,4 +5,5 @@ export default interface IUsersRepository {
     findById(user_id: string): Promise<User | undefined>;
     createUser(data: ICreateUserDTO): Promise<User>;
     updateUser(user: User, data: IUpdateUserDTO): Promise<User>;
+    deleteUser(user: User): Promise<User>;
 }
