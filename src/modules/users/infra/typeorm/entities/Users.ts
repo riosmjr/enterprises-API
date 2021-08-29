@@ -6,9 +6,12 @@ import {
     JoinColumn,
     CreateDateColumn,
     UpdateDateColumn,
-    DeleteDateColumn
+    DeleteDateColumn,
+    BeforeInsert,
+    BeforeUpdate,
 } from 'typeorm';
 
+const bcrypt = require("bcrypt");
 import Cities from "./Cities";
 import Schooling from "./Schooling";
 import Profiles from "./Profiles";
@@ -56,6 +59,14 @@ class Users {
     @JoinTable({database: 'profiles'})
     @JoinColumn({name: 'profile_id', referencedColumnName: 'profile_id'})
     profile_id: Profiles;
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    hashPassword() {
+        if (this.password) {
+            this.password = bcrypt.hashSync(this.password, 8);
+        }
+    }
 }
 
 export default Users;

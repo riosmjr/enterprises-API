@@ -15,4 +15,21 @@ usersRouter.get(
     userController.getUserById,
 );
 
+usersRouter.post(
+    '',
+    celebrate({
+        [Segments.BODY]: {
+            name: Joi.string().required(),
+            email: Joi.string().required(),
+            password: Joi.string().required(),
+            birth_at: Joi.date().required(),
+            is_active: Joi.boolean().default(true),
+            city_id: Joi.number().integer().required(),
+            schooling_id: Joi.number().integer().required(),
+            profile_id: Joi.number().integer().required(),
+        }
+    }),
+    userController.createUser,
+);
+
 export default usersRouter;
