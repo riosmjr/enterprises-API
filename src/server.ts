@@ -1,20 +1,47 @@
 import 'reflect-metadata';
 import "dotenv/config";
 
-import express from "express";
+import express, {NextFunction, Request, Response} from "express";
 import "express-async-errors";
 import routes from "./shared/infra/routes";
-import errorHandler from "./shared/errors/handler";
 import cors from "cors";
 
 import "./shared/infra/typeorm";
 import "./shared/container";
+import {errors} from "celebrate";
+import AppError from "./shared/errors/AppError";
+
+const APP_PORT = process.env.APP_PORT || 3333;
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-app.use(routes);
-app.use(errorHandler);
+app.use(
+    cors(),
+    express.json(),
+    routes,
+    errors(),
+);
 
-app.listen(app.listen(process.env.PORT || 3333));
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
+    console.error(err);
+    response.header('Access-Control-Allow-Origin', '*');
+    response.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept',
+    );
+    if (err instanceof AppError) {
+        return response.status(err.statusCode).json({
+            status: 'error',
+            message: err.message,
+        });
+    }
+    return response.status(500).json({
+        status: 'error',
+        message: 'Internal server error',
+    });
+});
+
+app.listen(APP_PORT, () => {
+    console.log(`▶️ Server started on port ${APP_PORT} !`);
+});
