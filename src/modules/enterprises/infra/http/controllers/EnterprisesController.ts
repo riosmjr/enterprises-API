@@ -1,10 +1,19 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
-import {CreateEnterprisesService, GetDirectorByEmailService} from "../../../services";
-import AppError from "../../../../../shared/errors/AppError";
+import {CreateEnterprisesService, GetDirectorByEmailService, UpdateEnterprisesService, GetEnterpriseByIdService} from "../../../services";
 
 export default class EnterprisesController {
+
+    public async getEnterpriseById(request: Request, response: Response): Promise<Response> {
+        const { enterprise_id } = request.params;
+
+        const getEnterprise = container.resolve(GetEnterpriseByIdService);
+        const enterprise = await getEnterprise.execute(enterprise_id);
+
+        return response.json(classToClass(enterprise));
+    }
+
     public async createEnterprises(
         request: Request,
         response: Response,
@@ -20,5 +29,27 @@ export default class EnterprisesController {
             const enterprise = await newEnterprise.execute(request.body);
 
             return response.json(classToClass(enterprise));
+    }
+
+    public async updateEnterprises(
+        request: Request,
+        response: Response,
+    ): Promise<Response> {
+
+        const {enterprise_id} = request.params;
+
+        if (request.body?.director) {
+            const {director} = request.body;
+
+            const getDirector = container.resolve(GetDirectorByEmailService);
+            const dataDirector = await getDirector.execute(director);
+
+            request.body.director = dataDirector.name;
+        }
+
+        const updateEnterprise = container.resolve(UpdateEnterprisesService);
+        const enterprise = await updateEnterprise.execute(request.body, enterprise_id);
+
+        return response.json(classToClass(enterprise));
     }
 }

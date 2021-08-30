@@ -6,6 +6,16 @@ import EnterprisesController from '../controllers/EnterprisesController';
 const enterprisesRouter = Router();
 const enterprisesController = new EnterprisesController();
 
+enterprisesRouter.get(
+    '/:enterprise_id',
+    celebrate({
+        [Segments.PARAMS]: {
+            enterprise_id: Joi.string().uuid({ version: 'uuidv4' }).required()
+        }
+    }),
+    enterprisesController.getEnterpriseById,
+);
+
 enterprisesRouter.post(
     '',
     celebrate({
@@ -19,6 +29,24 @@ enterprisesRouter.post(
         },
     }),
     enterprisesController.createEnterprises,
+);
+
+enterprisesRouter.put(
+    '/:enterprise_id',
+    celebrate({
+        [Segments.PARAMS]: {
+            enterprise_id: Joi.string().uuid({ version: 'uuidv4' }).required()
+        },
+        [Segments.BODY]: {
+            name: Joi.string(),
+            occupation_area: Joi.string(),
+            description: Joi.string(),
+            director: Joi.string().email(),
+            founded_at: Joi.date(),
+            is_active: Joi.boolean(),
+        },
+    }),
+    enterprisesController.updateEnterprises,
 );
 
 export default enterprisesRouter;

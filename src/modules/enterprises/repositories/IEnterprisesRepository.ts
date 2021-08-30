@@ -1,8 +1,10 @@
 import Enterprise from '../infra/typeorm/entities/Enterprises';
-import {ICreateEnterpriseDTO} from "../dtos/IEnterpriseDTO";
+import {ICreateEnterpriseDTO, IUpdateEnterpriseDTO} from "../dtos/IEnterpriseDTO";
 import User from "../../users/infra/typeorm/entities/Users";
 
 export default interface IUsersRepository {
+    findById(enterprise_id: string): Promise<Enterprise | undefined>;
     createEnterprise(data: ICreateEnterpriseDTO): Promise<Enterprise>;
+    updateEnterprise(enterprise: Enterprise, data: IUpdateEnterpriseDTO): Promise<Enterprise>;
     findDirectorByEmail(email: string): Promise<User | undefined>;
 }
