@@ -12,6 +12,8 @@ import {
 } from 'typeorm';
 
 const bcrypt = require("bcrypt");
+import {Exclude} from "class-transformer";
+
 import Cities from "./Cities";
 import Schooling from "./Schooling";
 import Profiles from "./Profiles";
@@ -31,6 +33,7 @@ class Users {
     birth_at: Date;
 
     @Column({nullable: false, select: false})
+    @Exclude()
     password: string;
 
     @Column({default: true})

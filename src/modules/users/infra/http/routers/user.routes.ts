@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 import UserController from "../controllers/UserController";
+import authentication from "../../../../../shared/middlewares/authentication";
 
 const usersRouter = Router();
 const userController = new UserController();
+usersRouter.use(authentication);
 
 usersRouter.get(
     '/:user_id',
