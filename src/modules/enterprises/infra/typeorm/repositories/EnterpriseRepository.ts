@@ -28,10 +28,16 @@ export class EnterpriseRepository implements IEnterprisesRepository {
         return enterprise;
     }
 
-    public async updateEnterprise(enterpriseData: Enterprise,data: IUpdateEnterpriseDTO): Promise<Enterprise> {
-        const enterprise = this.ormRepository.getRepository(Enterprise).merge(enterpriseData, data);
-        await this.ormRepository.getRepository(Enterprise).save(enterprise);
-        return enterprise;
+    public async updateEnterprise(enterprise: Enterprise,data: IUpdateEnterpriseDTO): Promise<Enterprise> {
+        const enterpriseUpdate = this.ormRepository.getRepository(Enterprise).merge(enterprise, data);
+        await this.ormRepository.getRepository(Enterprise).save(enterpriseUpdate);
+        return enterpriseUpdate;
+    }
+
+    public async deleteEnterprise(enterprise: Enterprise): Promise<Enterprise> {
+        const enterpriseDelete = this.ormRepository.getRepository(Enterprise).merge(enterprise, {is_active: false, updated_at: new Date(), deleted_at: new Date()});
+        await this.ormRepository.getRepository(Enterprise).save(enterpriseDelete);
+        return enterpriseDelete;
     }
 }
 

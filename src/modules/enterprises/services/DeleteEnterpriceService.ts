@@ -4,18 +4,16 @@ import IEnterprisesRepository from "../repositories/IEnterprisesRepository";
 
 import Enterprise from "../infra/typeorm/entities/Enterprises";
 
-import {IUpdateEnterpriseDTO} from "../dtos/IEnterpriseDTO";
-
 import AppError from "../../../shared/errors/AppError";
 
 @injectable()
-export class UpdateEnterprisesService {
+export class DeleteEnterpriceService {
     constructor(
         @inject(`EnterprisesRepository`)
         private enterprisesRepository: IEnterprisesRepository,
     ) {}
 
-    public async execute(data: IUpdateEnterpriseDTO, enterprise_id: string): Promise<Enterprise> {
+    public async execute(enterprise_id: string): Promise<Enterprise> {
 
         const enterprise = await this.enterprisesRepository.findById(enterprise_id);
 
@@ -23,6 +21,6 @@ export class UpdateEnterprisesService {
             throw new AppError('Enterprise does not exist or has been deleted', 404);
         }
 
-        return await this.enterprisesRepository.updateEnterprise(enterprise, data);
+        return await this.enterprisesRepository.deleteEnterprise(enterprise);
     }
 }

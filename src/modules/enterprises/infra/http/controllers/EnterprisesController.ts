@@ -1,7 +1,14 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
-import {CreateEnterprisesService, GetDirectorByEmailService, UpdateEnterprisesService, GetEnterpriseByIdService} from "../../../services";
+import {
+    CreateEnterprisesService,
+    GetDirectorByEmailService,
+    UpdateEnterprisesService,
+    GetEnterpriseByIdService,
+    DeleteEnterpriceService
+} from "../../../services";
+import {DeleteUserService} from "../../../../users/services";
 
 export default class EnterprisesController {
 
@@ -14,7 +21,7 @@ export default class EnterprisesController {
         return response.json(classToClass(enterprise));
     }
 
-    public async createEnterprises(
+    public async createEnterprise(
         request: Request,
         response: Response,
     ): Promise<Response> {
@@ -31,7 +38,7 @@ export default class EnterprisesController {
             return response.json(classToClass(enterprise));
     }
 
-    public async updateEnterprises(
+    public async updateEnterprise(
         request: Request,
         response: Response,
     ): Promise<Response> {
@@ -49,6 +56,18 @@ export default class EnterprisesController {
 
         const updateEnterprise = container.resolve(UpdateEnterprisesService);
         const enterprise = await updateEnterprise.execute(request.body, enterprise_id);
+
+        return response.json(classToClass(enterprise));
+    }
+
+    public async deleteEnterprise(
+        request: Request,
+        response: Response,
+    ): Promise<Response> {
+        const { enterprise_id } = request.params;
+
+        const deleteEnterprise = container.resolve(DeleteEnterpriceService);
+        const enterprise = await deleteEnterprise.execute(enterprise_id);
 
         return response.json(classToClass(enterprise));
     }

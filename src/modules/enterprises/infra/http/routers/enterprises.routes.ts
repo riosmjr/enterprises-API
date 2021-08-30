@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 
 import EnterprisesController from '../controllers/EnterprisesController';
+import usersRouter from "../../../../users/infra/http/routers/user.routes";
 
 const enterprisesRouter = Router();
 const enterprisesController = new EnterprisesController();
@@ -28,7 +29,7 @@ enterprisesRouter.post(
             is_active: Joi.boolean(),
         },
     }),
-    enterprisesController.createEnterprises,
+    enterprisesController.createEnterprise,
 );
 
 enterprisesRouter.put(
@@ -46,7 +47,17 @@ enterprisesRouter.put(
             is_active: Joi.boolean(),
         },
     }),
-    enterprisesController.updateEnterprises,
+    enterprisesController.updateEnterprise,
+);
+
+enterprisesRouter.delete(
+    '/:enterprise_id',
+    celebrate({
+        [Segments.PARAMS]: {
+            enterprise_id: Joi.string().uuid({ version: 'uuidv4' }).required()
+        },
+    }),
+    enterprisesController.deleteEnterprise,
 );
 
 export default enterprisesRouter;
