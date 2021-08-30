@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 import UserController from "../controllers/UserController";
 import authentication from "../../../../../shared/middlewares/authentication";
+import verifyPermission from "../../../../../shared/middlewares/verifyPermission";
 
 const usersRouter = Router();
 const userController = new UserController();
@@ -69,6 +70,7 @@ usersRouter.put(
             profile_id: Joi.number().integer().positive().max(4),
         }
     }),
+    verifyPermission,
     userController.updateUser,
 );
 
