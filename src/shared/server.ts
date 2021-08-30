@@ -3,13 +3,13 @@ import "dotenv/config";
 
 import express, {NextFunction, Request, Response} from "express";
 import "express-async-errors";
-import routes from "./shared/infra/routes";
+import routes from "./infra/routes";
 import cors from "cors";
 
-import "./shared/infra/typeorm";
-import "./shared/container";
+import "./infra/typeorm";
+import "./container";
 import {errors} from "celebrate";
-import AppError from "./shared/errors/AppError";
+import AppError from "./errors/AppError";
 
 const APP_PORT = process.env.APP_PORT || 3333;
 
