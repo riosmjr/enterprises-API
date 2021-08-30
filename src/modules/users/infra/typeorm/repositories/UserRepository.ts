@@ -17,6 +17,13 @@ export class UsersRepository implements IUsersRepository {
         return await this.ormRepository.findOne(user_id);
     }
 
+    public async findByEmail(email: string): Promise<User | undefined> {
+        return await this.ormRepository.findOne({
+            where: {email},
+            select: ['user_id', 'name', 'email', 'password', 'profile_id']
+        });
+    }
+
     public async findAll(filters: IFiltersGetAllUsersDTO): Promise<User[]> {
         const query = this.ormRepository.createQueryBuilder('us')
             .where(`deleted_at is null`);
