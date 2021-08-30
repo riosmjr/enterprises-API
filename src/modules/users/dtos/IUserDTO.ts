@@ -23,7 +23,8 @@ export interface IUpdateUserDTO {
 export interface IFiltersGetAllUsersDTO {
     name?: string;
     email?: string;
-    birth_at?: Date;
+    birth_at_begin?: Date;
+    birth_at_end?: Date;
     is_active?: boolean;
     city_id?: integer;
     state_id?: integer;

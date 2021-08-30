@@ -21,7 +21,8 @@ usersRouter.get(
         [Segments.QUERY]: {
             name: Joi.string(),
             email: Joi.string(),
-            birth_at: Joi.date(),
+            birth_at_begin: Joi.date(),
+            birth_at_end: Joi.date(),
             is_active: Joi.boolean(),
             city_id: Joi.number().integer().positive().max(5564),
             schooling_id: Joi.number().integer().positive().max(7),
