@@ -16,7 +16,6 @@ import {Exclude} from "class-transformer";
 
 import Cities from "./Cities";
 import Schooling from "./Schooling";
-import Profiles from "./Profiles";
 
 @Entity('users')
 class Users {
@@ -57,11 +56,6 @@ class Users {
     @JoinTable({database: 'schooling'})
     @JoinColumn({name: 'schooling_id', referencedColumnName: 'schooling_id'})
     schooling_id: Schooling;
-
-    @Column({type: 'integer'})
-    @JoinTable({database: 'profiles'})
-    @JoinColumn({name: 'profile_id', referencedColumnName: 'profile_id'})
-    profile_id: Profiles;
 
     @BeforeInsert()
     @BeforeUpdate()

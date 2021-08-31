@@ -3,10 +3,17 @@ import { Connection, getConnection } from 'typeorm';
 import IEnterprisesRepository from "../../../repositories/IEnterprisesRepository";
 
 import Enterprise from "../entities/Enterprises";
-import {ICreateEnterpriseDTO, IFiltersGetAllEnterprisesDTO, IUpdateEnterpriseDTO} from "../../../dtos/IEnterpriseDTO";
+import {
+    ICreateEnterpriseDTO,
+    ICreateLinkUserWithEnterpriseDTO,
+    IFiltersGetAllEnterprisesDTO,
+    IUpdateEnterpriseDTO
+} from "../../../dtos/IEnterpriseDTO";
 
 import User from "../../../../users/infra/typeorm/entities/Users";
 import {format} from "date-fns";
+import {IGetUserByEmailDTO} from "../../../../users/dtos/IUserDTO";
+import EnterpriseUser from "../entities/EnterpriseUser";
 
 export class EnterpriseRepository implements IEnterprisesRepository {
     private ormRepository: Connection;
@@ -19,8 +26,12 @@ export class EnterpriseRepository implements IEnterprisesRepository {
         return await this.ormRepository.getRepository(Enterprise).findOne(enterprise_id);
     }
 
-    public async findDirectorByEmail(email: string): Promise<User | undefined> {
-        return await this.ormRepository.getRepository(User).findOne({email});
+    public async findDirectorByEmail(email: string): Promise<IGetUserByEmailDTO | undefined> {
+        return await this.ormRepository.getRepository(User).createQueryBuilder('us')
+            .select('us.user_id, us.name, eu.profile_id')
+            .leftJoin('enterpriseuser', 'eu', 'eu.user_id = us.user_id')
+            .where(`us.email = '${email}'`)
+            .getRawOne();
     }
 
     public async findAll(filters: IFiltersGetAllEnterprisesDTO): Promise<Enterprise[] | undefined> {
@@ -74,6 +85,12 @@ export class EnterpriseRepository implements IEnterprisesRepository {
         const enterpriseDelete = this.ormRepository.getRepository(Enterprise).merge(enterprise, {is_active: false, updated_at: new Date(), deleted_at: new Date()});
         await this.ormRepository.getRepository(Enterprise).save(enterpriseDelete);
         return enterpriseDelete;
+    }
+
+    public async createLinkUserWithEnterprise(data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser> {
+        const linkUserWithEnterprise = this.ormRepository.getRepository(EnterpriseUser).create(data);
+        await this.ormRepository.getRepository(EnterpriseUser).save(linkUserWithEnterprise);
+        return linkUserWithEnterprise;
     }
 }
 

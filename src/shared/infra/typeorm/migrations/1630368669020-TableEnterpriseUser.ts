@@ -23,6 +23,10 @@ export class TableEnterpriseUser1630368669020 implements MigrationInterface {
                         type: "uuid",
                     },
                     {
+                        name: "profile_id",
+                        type: "integer",
+                    },
+                    {
                         name: "is_active",
                         type: "boolean",
                         default: true
@@ -52,6 +56,12 @@ export class TableEnterpriseUser1630368669020 implements MigrationInterface {
             columnNames: ["user_id"],
             referencedColumnNames: ["user_id"],
             referencedTableName: "users",
+        }));
+
+        await queryRunner.createForeignKey("enterpriseuser", new TableForeignKey({
+            columnNames: ["profile_id"],
+            referencedColumnNames: ["profile_id"],
+            referencedTableName: "profiles",
         }));
     }
 

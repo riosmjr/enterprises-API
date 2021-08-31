@@ -9,6 +9,9 @@ import {
     DeleteEnterpriseService,
     GetAllEnterprisesService,
 } from "../../../services";
+import {GetUserByIdService} from "../../../../users/services";
+import AppError from "../../../../../shared/errors/AppError";
+import {CreateLinkUserWithEnterpriseService} from "../../../services/CreateLinkUserWithEnterpriseService";
 
 export default class EnterprisesController {
 
@@ -79,5 +82,31 @@ export default class EnterprisesController {
         const enterprise = await deleteEnterprise.execute(enterprise_id);
 
         return response.json(classToClass(enterprise));
+    }
+
+    public async linkUserWithEnterprise(
+        request: Request,
+        response: Response,
+    ): Promise<Response> {
+        const {enterprise_id, user_id} = request.body;
+
+        const getUser = container.resolve(GetUserByIdService);
+        const user = await getUser.execute(user_id);
+
+        if (!user) {
+            throw new AppError('User does not exist or has been deleted', 404);
+        }
+
+        const getEnterprise = container.resolve(GetEnterpriseByIdService);
+        const enterprise = await getEnterprise.execute(enterprise_id);
+
+        if (!enterprise) {
+            throw new AppError('Enterprise does not exist or has been deleted', 404);
+        }
+
+        const createLinkUserWithEnterprise = container.resolve(CreateLinkUserWithEnterpriseService);
+        const linkUserWithEnterprise = await createLinkUserWithEnterprise.execute(request.body);
+
+        return response.json(classToClass(linkUserWithEnterprise));
     }
 }

@@ -2,9 +2,9 @@ import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 
 import EnterprisesController from '../controllers/EnterprisesController';
-import usersRouter from "../../../../users/infra/http/routers/user.routes";
 
 const enterprisesRouter = Router();
+
 const enterprisesController = new EnterprisesController();
 
 enterprisesRouter.get(
@@ -75,5 +75,18 @@ enterprisesRouter.delete(
     }),
     enterprisesController.deleteEnterprise,
 );
+
+enterprisesRouter.post(
+    '/link-user-with-enterprise',
+    celebrate({
+        [Segments.BODY]: {
+            enterprise_id: Joi.string().uuid({ version: 'uuidv4' }).required(),
+            user_id: Joi.string().uuid({ version: 'uuidv4' }).required(),
+            profile_id: Joi.number().integer().positive().max(4).required(),
+
+        }
+    }),
+    enterprisesController.linkUserWithEnterprise,
+)
 
 export default enterprisesRouter;

@@ -10,6 +10,7 @@ import {
 
 import User from "../../../../users/infra/typeorm/entities/Users";
 import Enterprise from "./Enterprises";
+import Profile from "../../../../users/infra/typeorm/entities/Profiles";
 
 @Entity('enterpriseuser')
 class EnterpriseUser {
@@ -25,6 +26,11 @@ class EnterpriseUser {
     @JoinTable({database: 'enterprises'})
     @JoinColumn({name: 'enterprise_id', referencedColumnName: 'enterprise_id'})
     enterprise_id: Enterprise;
+
+    @Column({type: 'uuid'})
+    @JoinTable({database: 'profiles'})
+    @JoinColumn({name: 'profile_id', referencedColumnName: 'profile_id'})
+    profile_id: Profile;
 
     @Column({default: true})
     is_active: boolean;

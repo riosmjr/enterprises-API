@@ -47,7 +47,6 @@ usersRouter.post(
             is_active: Joi.boolean().default(true),
             city_id: Joi.number().integer().positive().required().max(5564),
             schooling_id: Joi.number().integer().positive().required().max(7),
-            profile_id: Joi.number().integer().positive().required().max(4),
         }
     }),
     userController.createUser,
@@ -67,7 +66,6 @@ usersRouter.put(
             is_active: Joi.boolean(),
             city_id: Joi.number().integer().positive().max(5564),
             schooling_id: Joi.number().integer().positive().max(7),
-            profile_id: Joi.number().integer().positive().max(4),
         }
     }),
     verifyPermission,

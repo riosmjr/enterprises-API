@@ -4,7 +4,7 @@ import AppError from '../../../shared/errors/AppError';
 
 import IUsersRepository from '../../users/repositories/IUsersRepository';
 
-import User from '../../users/infra/typeorm/entities/Users';
+import {IGetUserByEmailDTO} from "../dtos/IUserDTO";
 
 @injectable()
 export class GetUserByEmailService {
@@ -13,7 +13,7 @@ export class GetUserByEmailService {
         private usersRepository: IUsersRepository,
     ) {}
 
-    public async execute(email: string): Promise<User> {
+    public async execute(email: string): Promise<IGetUserByEmailDTO> {
         const user = await this.usersRepository.findByEmail(email);
 
         if (!user) {

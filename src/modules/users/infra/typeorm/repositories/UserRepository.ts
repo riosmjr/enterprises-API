@@ -4,7 +4,7 @@ import IUsersRepository from '../../../repositories/IUsersRepository';
 import {format} from 'date-fns';
 
 import User from '../entities/Users';
-import {ICreateUserDTO, IFiltersGetAllUsersDTO, IUpdateUserDTO} from "../../../dtos/IUserDTO";
+import {ICreateUserDTO, IFiltersGetAllUsersDTO, IGetUserByEmailDTO, IUpdateUserDTO} from "../../../dtos/IUserDTO";
 
 export class UsersRepository implements IUsersRepository {
     private ormRepository: Repository<User>;
@@ -17,15 +17,17 @@ export class UsersRepository implements IUsersRepository {
         return await this.ormRepository.findOne(user_id);
     }
 
-    public async findByEmail(email: string): Promise<User | undefined> {
-        return await this.ormRepository.findOne({
-            where: {email},
-            select: ['user_id', 'name', 'email', 'password', 'profile_id']
-        });
+    public async findByEmail(email: string): Promise<IGetUserByEmailDTO | undefined> {
+        return await this.ormRepository.createQueryBuilder('us')
+            .select('us.user_id, us.name, us.email, us.password, eu.profile_id')
+            .leftJoin('enterpriseuser', 'eu', 'eu.user_id = us.user_id')
+            .where(`us.email = '${email}'`)
+            .getRawOne();
     }
 
     public async findAll(filters: IFiltersGetAllUsersDTO): Promise<User[]> {
         const query = this.ormRepository.createQueryBuilder('us')
+            .innerJoin('enterpriseuser', 'eu', 'eu.user_id = us.user_id')
             .where(`deleted_at is null`);
 
         if (filters.name) {
@@ -61,7 +63,7 @@ export class UsersRepository implements IUsersRepository {
         }
 
         if (filters.profile_id) {
-            query.andWhere(`us.profile_id = ${filters.profile_id}`);
+            query.andWhere(`eu.profile_id = ${filters.profile_id}`);
         }
 
         return await query.getRawMany();

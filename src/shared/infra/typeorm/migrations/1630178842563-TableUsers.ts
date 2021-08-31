@@ -35,10 +35,6 @@ export class TableUsers1630178842563 implements MigrationInterface {
                         type: "integer",
                     },
                     {
-                        name: "profile_id",
-                        type: "integer",
-                    },
-                    {
                         name: "password",
                         type: "varchar",
                     },
@@ -78,12 +74,6 @@ export class TableUsers1630178842563 implements MigrationInterface {
             columnNames: ["schooling_id"],
             referencedColumnNames: ["schooling_id"],
             referencedTableName: "schooling",
-        }));
-
-        await queryRunner.createForeignKey("users", new TableForeignKey({
-            columnNames: ["profile_id"],
-            referencedColumnNames: ["profile_id"],
-            referencedTableName: "profiles",
         }));
     }
 

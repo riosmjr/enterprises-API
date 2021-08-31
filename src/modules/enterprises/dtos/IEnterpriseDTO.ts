@@ -25,3 +25,9 @@ export interface IFiltersGetAllEnterprisesDTO {
     founded_at_end?: Date;
     is_active?: boolean;
 }
+
+export interface ICreateLinkUserWithEnterpriseDTO {
+    user_id: uuid;
+    enterprise_id: uuid;
+    profile_id: interger;
+}

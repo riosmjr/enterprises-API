@@ -6,7 +6,6 @@ export interface ICreateUserDTO {
     is_active?: boolean;
     city_id: integer;
     schooling_id: integer;
-    profile_id: integer;
 }
 
 export interface IUpdateUserDTO {
@@ -17,7 +16,6 @@ export interface IUpdateUserDTO {
     is_active?: boolean;
     city_id?: integer;
     schooling_id?: integer;
-    profile_id?: integer;
 }
 
 export interface IFiltersGetAllUsersDTO {
@@ -30,4 +28,12 @@ export interface IFiltersGetAllUsersDTO {
     state_id?: integer;
     schooling_id?: integer;
     profile_id?: integer;
+}
+
+export interface IGetUserByEmailDTO {
+    user_id: string;
+    name: string;
+    email?: string;
+    password?: string;
+    profile_id: integer;
 }
