@@ -7,14 +7,14 @@ import IUsersRepository from '../../users/repositories/IUsersRepository';
 import {IGetUserDTO} from "../dtos/IUserDTO";
 
 @injectable()
-export class GetUserByEmailService {
+export class GetUserService {
     constructor(
         @inject(`UsersRepository`)
         private usersRepository: IUsersRepository,
     ) {}
 
-    public async execute(email: string): Promise<IGetUserDTO> {
-        const user = await this.usersRepository.findByEmail(email);
+    public async execute(user_id: string): Promise<IGetUserDTO> {
+        const user = await this.usersRepository.findUser(user_id);
 
         if (!user) {
             throw new AppError('User does not exist or has been deleted', 404);

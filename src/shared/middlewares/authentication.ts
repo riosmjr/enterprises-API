@@ -8,6 +8,7 @@ import AppError from '../errors/AppError';
 interface ITokenPayload {
     user_id: string;
     profile_id: number;
+    enterprise_id: number;
 }
 
 export default function authentication(
@@ -25,11 +26,12 @@ export default function authentication(
     try {
         const decoded = verify(token, authConfig.jwt.secret);
 
-        const {user_id, profile_id} = decoded as ITokenPayload;
+        const {user_id, profile_id, enterprise_id} = decoded as ITokenPayload;
 
         request.user = {
           user_id: user_id,
           profile_id: profile_id,
+          enterprise_id: enterprise_id
         };
 
         return next();

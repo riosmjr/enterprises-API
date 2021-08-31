@@ -12,7 +12,7 @@ import {
 
 import User from "../../../../users/infra/typeorm/entities/Users";
 import {format} from "date-fns";
-import {IFiltersGetAllUsersDTO, IGetUserByEmailDTO} from "../../../../users/dtos/IUserDTO";
+import {IFiltersGetAllUsersDTO, IGetUserDTO} from "../../../../users/dtos/IUserDTO";
 import EnterpriseUser from "../entities/EnterpriseUser";
 
 export class EnterpriseRepository implements IEnterprisesRepository {
@@ -26,7 +26,7 @@ export class EnterpriseRepository implements IEnterprisesRepository {
         return await this.ormRepository.getRepository(Enterprise).findOne(enterprise_id);
     }
 
-    public async findDirectorByEmail(email: string): Promise<IGetUserByEmailDTO | undefined> {
+    public async findDirectorByEmail(email: string): Promise<IGetUserDTO | undefined> {
         return await this.ormRepository.getRepository(User).createQueryBuilder('us')
             .select('us.user_id, us.name, eu.profile_id')
             .leftJoin('enterpriseuser', 'eu', 'eu.user_id = us.user_id')

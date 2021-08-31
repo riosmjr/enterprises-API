@@ -1,22 +1,27 @@
 import AppError from "../errors/AppError";
 import {Request, Response, NextFunction} from 'express';
+import {container} from "tsyringe";
+import {GetUserService} from "../../modules/users/services";
 
-export default function verifyPermission(
+export default async function verifyPermission(
     request: Request,
     response: Response,
     next: NextFunction,
-): void {
+): Promise<void> {
 
     const {user_id} = request.params;
-    const {profile_id} = request.user;
+    const {profile_id, enterprise_id} = request.user;
 
     if (profile_id === 1) {
         return next();
     }
 
-    //TODO Adicionar validação por empresa
     if (profile_id === 2 || profile_id === 3) {
-        if (user_id === request.user.user_id) {
+
+        const getUser = container.resolve(GetUserService);
+        const user = await getUser.execute(user_id);
+
+        if (user && (user_id === request.user.user_id || enterprise_id === user.enterprise_id)) {
             return next();
         }
 

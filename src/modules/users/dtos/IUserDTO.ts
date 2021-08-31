@@ -30,10 +30,11 @@ export interface IFiltersGetAllUsersDTO {
     profile_id?: integer;
 }
 
-export interface IGetUserByEmailDTO {
+export interface IGetUserDTO {
     user_id: string;
     name: string;
     email?: string;
     password?: string;
     profile_id: integer;
+    enterprise_id: integer;
 }

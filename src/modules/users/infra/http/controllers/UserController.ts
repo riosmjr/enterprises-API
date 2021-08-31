@@ -17,7 +17,7 @@ export default class UserController {
         const params  = request.query;
 
         const getUser = container.resolve(GetAllUsersService);
-        const user = await getUser.execute(params);
+        const user = await getUser.execute(params, request);
 
         return response.json(classToClass(user));
     }

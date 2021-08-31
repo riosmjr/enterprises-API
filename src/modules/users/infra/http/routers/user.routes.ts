@@ -16,6 +16,7 @@ usersRouter.get(
             user_id: Joi.string().uuid({ version: 'uuidv4' }).required()
         }
     }),
+    verifyPermission,
     userController.getUserById,
 );
 
@@ -34,7 +35,6 @@ usersRouter.get(
             profile_id: Joi.number().integer().positive().max(4),
         }
     }),
-    verifyAdminPermission,
     userController.getAllUsers,
 );
 

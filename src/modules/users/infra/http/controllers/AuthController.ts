@@ -32,7 +32,7 @@ export default class AuthController {
 
     const { secret, expiresIn } = authConfig.jwt;
 
-    const api_token = sign({user_id: user.user_id, profile_id: user.profile_id}, secret, {expiresIn});
+    const api_token = sign({user_id: user.user_id, profile_id: user.profile_id, enterprise_id: user.enterprise_id}, secret, {expiresIn});
 
     return response.json({ user: classToClass(user), api_token });
   }

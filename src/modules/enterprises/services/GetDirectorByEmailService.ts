@@ -4,7 +4,7 @@ import AppError from '../../../shared/errors/AppError';
 
 import IEnterprisesRepository from "../repositories/IEnterprisesRepository";
 
-import {IGetUserByEmailDTO} from "../../users/dtos/IUserDTO";
+import {IGetUserDTO} from "../../users/dtos/IUserDTO";
 
 @injectable()
 export class GetDirectorByEmailService {
@@ -13,7 +13,7 @@ export class GetDirectorByEmailService {
         private enterprisesRepository: IEnterprisesRepository,
     ) {}
 
-    public async execute(email: string): Promise<IGetUserByEmailDTO> {
+    public async execute(email: string): Promise<IGetUserDTO> {
         const director = await this.enterprisesRepository.findDirectorByEmail(email);
 
         if (!director || director.profile_id !== 3) {
