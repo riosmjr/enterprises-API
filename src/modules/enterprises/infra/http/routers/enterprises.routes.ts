@@ -102,4 +102,25 @@ enterprisesRouter.post(
     enterprisesController.unlinkUserEnterprise,
 )
 
+enterprisesRouter.get(
+    '/link-user-enterprise/:enterprise_id',
+    celebrate({
+        [Segments.PARAMS]: {
+            enterprise_id: Joi.string().uuid({ version: 'uuidv4' }).required()
+        },
+        [Segments.QUERY]: {
+            name: Joi.string(),
+            email: Joi.string(),
+            birth_at_begin: Joi.date(),
+            birth_at_end: Joi.date(),
+            is_active: Joi.boolean(),
+            city_id: Joi.number().integer().positive().max(5564),
+            schooling_id: Joi.number().integer().positive().max(7),
+            state_id: Joi.number().integer().positive().max(28),
+            profile_id: Joi.number().integer().positive().max(4),
+        }
+    }),
+    enterprisesController.getAllLinkEnterprisesUsers,
+)
+
 export default enterprisesRouter;

@@ -5,8 +5,9 @@ import {
     IFiltersGetAllEnterprisesDTO,
     IUpdateEnterpriseDTO
 } from "../dtos/IEnterpriseDTO";
-import {IGetUserByEmailDTO} from "../../users/dtos/IUserDTO";
+import {IFiltersGetAllUsersDTO, IGetUserByEmailDTO} from "../../users/dtos/IUserDTO";
 import EnterpriseUser from "../infra/typeorm/entities/EnterpriseUser";
+import Users from "../../users/infra/typeorm/entities/Users";
 
 export default interface IEnterprisesRepository {
     findById(enterprise_id: string): Promise<Enterprise | undefined>;
@@ -18,4 +19,5 @@ export default interface IEnterprisesRepository {
     createLinkUserWithEnterprise(data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser>;
     deleteLinkUserWithEnterprise(enterpriseUser: EnterpriseUser, data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser>;
     findLinkUserWithEnterprise(data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser | undefined>;
+    findAllLinkEnterprisesUsers(filters: IFiltersGetAllUsersDTO, enterprise_id: string): Promise<Users[] | undefined>
 }

@@ -7,7 +7,7 @@ import {
     UpdateEnterprisesService,
     GetEnterpriseByIdService,
     DeleteEnterpriseService,
-    GetAllEnterprisesService, DeleteLinkUserWithEnterpriseService,
+    GetAllEnterprisesService, DeleteLinkUserWithEnterpriseService, GetAllLinkEnterprisesUsers,
 } from "../../../services";
 import {GetUserByIdService} from "../../../../users/services";
 import AppError from "../../../../../shared/errors/AppError";
@@ -134,5 +134,15 @@ export default class EnterprisesController {
         const unlinkUserEnterprise = await deleteLinkUserEnterprise.execute(request.body);
 
         return response.json(classToClass(unlinkUserEnterprise));
+    }
+
+    public async getAllLinkEnterprisesUsers(request: Request, response: Response): Promise<Response> {
+        const { enterprise_id } =  request.params;
+        const params  = request.query;
+
+        const getLinkEnterprisesUsers = container.resolve(GetAllLinkEnterprisesUsers);
+        const linkEnterpriseUser = await getLinkEnterprisesUsers.execute(params, enterprise_id);
+
+        return response.json(classToClass(linkEnterpriseUser));
     }
 }

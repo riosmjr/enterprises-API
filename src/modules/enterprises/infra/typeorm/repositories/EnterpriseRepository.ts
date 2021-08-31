@@ -12,7 +12,7 @@ import {
 
 import User from "../../../../users/infra/typeorm/entities/Users";
 import {format} from "date-fns";
-import {IGetUserByEmailDTO} from "../../../../users/dtos/IUserDTO";
+import {IFiltersGetAllUsersDTO, IGetUserByEmailDTO} from "../../../../users/dtos/IUserDTO";
 import EnterpriseUser from "../entities/EnterpriseUser";
 
 export class EnterpriseRepository implements IEnterprisesRepository {
@@ -99,8 +99,53 @@ export class EnterpriseRepository implements IEnterprisesRepository {
         return unlinkUserEnterprise;
     }
 
-    public async findLinkUserWithEnterprise(data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser | undefined> {
-        return await this.ormRepository.getRepository(EnterpriseUser).findOne(data);
+    public async findAllLinkEnterprisesUsers(filters: IFiltersGetAllUsersDTO, enterprise_id: string): Promise<User[] | undefined> {
+        const query = this.ormRepository.getRepository(EnterpriseUser).createQueryBuilder('eu')
+            .select('us')
+            .innerJoin('users', 'us', 'us.user_id = eu.user_id')
+            .where(`eu.enterprise_id = '${enterprise_id}'`);
+
+        if (filters.name) {
+            query.andWhere(`us.name like '%${filters.name}%'`);
+        }
+
+        if (filters.email) {
+            query.andWhere(`us.email like '%${filters.email}%'`);
+        }
+
+        if (filters.birth_at_begin) {
+            query.andWhere(`us.birth_at >= '${format(filters.birth_at_begin, 'yyyy-MM-dd')}'`);
+        }
+
+        if (filters.birth_at_end) {
+            query.andWhere(`us.birth_at <= '${format(filters.birth_at_end, 'yyyy-MM-dd')}'`);
+        }
+
+        if (filters.is_active !== undefined) {
+            query.andWhere(`us.is_active = ${(!!filters.is_active)}`);
+        }
+
+        if (filters.city_id) {
+            query.andWhere(`us.city_id = ${filters.city_id}`);
+        }
+
+        if (filters.state_id) {
+            query.innerJoin('cities', 'ci', `ci.city_id = us.city_id AND ci.state_id = ${filters.state_id}`);
+        }
+
+        if (filters.schooling_id) {
+            query.andWhere(`us.schooling_id = ${filters.schooling_id}`);
+        }
+
+        if (filters.profile_id) {
+            query.andWhere(`eu.profile_id = ${filters.profile_id}`);
+        }
+
+        return await query.getRawMany();
+    }
+
+    findLinkUserWithEnterprise(data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser | undefined> {
+        return Promise.resolve(undefined);
     }
 }
 

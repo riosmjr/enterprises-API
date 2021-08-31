@@ -7,3 +7,4 @@ export * from './GetAllEnterprisesService';
 export * from './CreateLinkUserWithEnterpriseService';
 export * from './DeleteLinkUserWithEnterpriseService';
 export * from './GetLinkUserEnterpriseService';
+export * from './GetAllLinkEnterprisesUsers';
