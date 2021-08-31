@@ -9,9 +9,9 @@ import {
     DeleteEnterpriseService,
     GetAllEnterprisesService, DeleteLinkUserWithEnterpriseService, GetAllLinkEnterprisesUsers,
 } from "../../../services";
-import {GetUserByIdService} from "../../../../users/services";
+import {GetUserService} from "../../../../users/services";
 import AppError from "../../../../../shared/errors/AppError";
-import {CreateLinkUserWithEnterpriseService} from "../../../services/CreateLinkUserWithEnterpriseService";
+import {CreateLinkUserWithEnterpriseService} from "../../../services";
 
 export default class EnterprisesController {
 
@@ -90,11 +90,15 @@ export default class EnterprisesController {
     ): Promise<Response> {
         const {enterprise_id, user_id} = request.body;
 
-        const getUser = container.resolve(GetUserByIdService);
+        const getUser = container.resolve(GetUserService);
         const user = await getUser.execute(user_id);
 
         if (!user) {
             throw new AppError('User does not exist or has been deleted', 404);
+        }
+
+        if (user.profile_id === 1) {
+            throw new AppError('It is not possible to perform this action for an admin user.', 404);
         }
 
         const getEnterprise = container.resolve(GetEnterpriseByIdService);
@@ -102,6 +106,10 @@ export default class EnterprisesController {
 
         if (!enterprise) {
             throw new AppError('Enterprise does not exist or has been deleted', 404);
+        }
+
+        if (request.user.profile_id !== 1 && enterprise_id !== request.user.enterprise_id){
+            throw new AppError('User not autorization.', 404);
         }
 
         const createLinkUserWithEnterprise = container.resolve(CreateLinkUserWithEnterpriseService);
@@ -116,7 +124,7 @@ export default class EnterprisesController {
     ): Promise<Response> {
         const {enterprise_id, user_id} = request.body;
 
-        const getUser = container.resolve(GetUserByIdService);
+        const getUser = container.resolve(GetUserService);
         const user = await getUser.execute(user_id);
 
         if (!user) {
@@ -128,6 +136,10 @@ export default class EnterprisesController {
 
         if (!enterprise) {
             throw new AppError('Enterprise does not exist or has been deleted', 404);
+        }
+
+        if (request.user.profile_id !== 1 && enterprise_id !== request.user.enterprise_id){
+            throw new AppError('User not autorization.', 404);
         }
 
         const deleteLinkUserEnterprise = container.resolve(DeleteLinkUserWithEnterpriseService);

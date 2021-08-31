@@ -144,8 +144,12 @@ export class EnterpriseRepository implements IEnterprisesRepository {
         return await query.getRawMany();
     }
 
-    findLinkUserWithEnterprise(data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser | undefined> {
-        return Promise.resolve(undefined);
+    public async findLinkUserWithEnterprise(data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser | undefined> {
+        return await this.ormRepository.getRepository(EnterpriseUser).findOne({
+            enterprise_id: data.enterprise_id,
+            user_id: data.user_id,
+            profile_id: data.profile_id
+        });
     }
 }
 
