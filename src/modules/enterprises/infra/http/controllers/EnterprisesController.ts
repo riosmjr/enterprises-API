@@ -6,9 +6,9 @@ import {
     GetDirectorByEmailService,
     UpdateEnterprisesService,
     GetEnterpriseByIdService,
-    DeleteEnterpriceService
+    DeleteEnterpriceService,
+    GetAllEnterprisesService,
 } from "../../../services";
-import {DeleteUserService} from "../../../../users/services";
 
 export default class EnterprisesController {
 
@@ -17,6 +17,15 @@ export default class EnterprisesController {
 
         const getEnterprise = container.resolve(GetEnterpriseByIdService);
         const enterprise = await getEnterprise.execute(enterprise_id);
+
+        return response.json(classToClass(enterprise));
+    }
+
+    public async getAllEnterprices(request: Request, response: Response): Promise<Response> {
+        const params  = request.query;
+
+        const getEnterprises = container.resolve(GetAllEnterprisesService);
+        const enterprise = await getEnterprises.execute(params);
 
         return response.json(classToClass(enterprise));
     }

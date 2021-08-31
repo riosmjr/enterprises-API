@@ -17,6 +17,22 @@ enterprisesRouter.get(
     enterprisesController.getEnterpriseById,
 );
 
+enterprisesRouter.get(
+    '',
+    celebrate({
+        [Segments.QUERY]: {
+            name: Joi.string(),
+            occupation_area: Joi.string(),
+            description: Joi.string(),
+            director: Joi.string().email(),
+            founded_at_begin: Joi.date(),
+            founded_at_end: Joi.date(),
+            is_active: Joi.boolean(),
+        }
+    }),
+    enterprisesController.getAllEnterprices,
+);
+
 enterprisesRouter.post(
     '',
     celebrate({

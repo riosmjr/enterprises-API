@@ -37,11 +37,11 @@ export class UsersRepository implements IUsersRepository {
         }
 
         if (filters.birth_at_begin) {
-            query.andWhere(`us.birth_at >= '%${format(filters.birth_at_begin, 'yyyy-MM-dd')}%'`);
+            query.andWhere(`us.birth_at >= '${format(filters.birth_at_begin, 'yyyy-MM-dd')}'`);
         }
 
         if (filters.birth_at_end) {
-            query.andWhere(`us.birth_at <= '%${format(filters.birth_at_end, 'yyyy-MM-dd')}%'`);
+            query.andWhere(`us.birth_at <= '${format(filters.birth_at_end, 'yyyy-MM-dd')}'`);
         }
 
         if (filters.is_active !== undefined) {
