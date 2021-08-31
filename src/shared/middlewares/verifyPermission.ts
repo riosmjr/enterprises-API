@@ -1,7 +1,7 @@
 import AppError from "../errors/AppError";
 import {Request, Response, NextFunction} from 'express';
 
-export default function authentication(
+export default function verifyPermission(
     request: Request,
     response: Response,
     next: NextFunction,

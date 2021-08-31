@@ -2,10 +2,13 @@ import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 
 import EnterprisesController from '../controllers/EnterprisesController';
+import authentication from "../../../../../shared/middlewares/authentication";
+import verifyAdminPermission from "../../../../../shared/middlewares/verifyAdminPermission";
+import usersRouter from "../../../../users/infra/http/routers/user.routes";
 
 const enterprisesRouter = Router();
-
 const enterprisesController = new EnterprisesController();
+usersRouter.use(authentication);
 
 enterprisesRouter.get(
     '/:enterprise_id',
@@ -30,6 +33,7 @@ enterprisesRouter.get(
             is_active: Joi.boolean(),
         }
     }),
+    verifyAdminPermission,
     enterprisesController.getAllEnterprises,
 );
 
@@ -45,6 +49,7 @@ enterprisesRouter.post(
             is_active: Joi.boolean(),
         },
     }),
+    verifyAdminPermission,
     enterprisesController.createEnterprise,
 );
 
@@ -73,6 +78,7 @@ enterprisesRouter.delete(
             enterprise_id: Joi.string().uuid({ version: 'uuidv4' }).required()
         },
     }),
+    verifyAdminPermission,
     enterprisesController.deleteEnterprise,
 );
 

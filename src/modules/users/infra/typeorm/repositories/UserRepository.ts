@@ -28,7 +28,7 @@ export class UsersRepository implements IUsersRepository {
     public async findAll(filters: IFiltersGetAllUsersDTO): Promise<User[]> {
         const query = this.ormRepository.createQueryBuilder('us')
             .leftJoin('enterpriseuser', 'eu', 'eu.user_id = us.user_id')
-            .where(`deleted_at is null`);
+            .where(`us.deleted_at is null`);
 
         if (filters.name) {
             query.andWhere(`us.name like '%${filters.name}%'`);

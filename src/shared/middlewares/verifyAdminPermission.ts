@@ -1,13 +1,16 @@
+import AppError from "../errors/AppError";
 import {Request, Response, NextFunction} from 'express';
 
-module.exports = (req: Request, res: Response, next: NextFunction) => {
-    try {
-        if (req.user.profile_id !== 1) {
-            return res.status(401).send({error: 'User not autorization, administrator permission required.'});
-        }
+export default function verifyAdminPermission(
+    request: Request,
+    response: Response,
+    next: NextFunction,
+): void {
+    console.log(request.user)
 
-        return next();
-    } catch (e) {
-        return res.status(401).send({error: 'Unexpected error'});
+    if (request.user.profile_id !== 1) {
+        throw new AppError('User not autorization, administrator permission required.', 401);
     }
+
+    return next();
 }

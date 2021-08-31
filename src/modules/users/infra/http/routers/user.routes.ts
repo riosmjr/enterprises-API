@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 import UserController from "../controllers/UserController";
 import authentication from "../../../../../shared/middlewares/authentication";
+import verifyAdminPermission from "../../../../../shared/middlewares/verifyAdminPermission";
 import verifyPermission from "../../../../../shared/middlewares/verifyPermission";
 
 const usersRouter = Router();
@@ -33,6 +34,7 @@ usersRouter.get(
             profile_id: Joi.number().integer().positive().max(4),
         }
     }),
+    verifyAdminPermission,
     userController.getAllUsers,
 );
 
@@ -49,6 +51,7 @@ usersRouter.post(
             schooling_id: Joi.number().integer().positive().required().max(7),
         }
     }),
+    verifyAdminPermission,
     userController.createUser,
 );
 
@@ -79,6 +82,7 @@ usersRouter.delete(
             user_id: Joi.string().uuid({ version: 'uuidv4' }).required()
         },
     }),
+    verifyAdminPermission,
     userController.deleteUser,
 );
 
