@@ -7,7 +7,7 @@ import Enterprise from "../infra/typeorm/entities/Enterprises";
 import AppError from "../../../shared/errors/AppError";
 
 @injectable()
-export class DeleteEnterpriceService {
+export class DeleteEnterpriseService {
     constructor(
         @inject(`EnterprisesRepository`)
         private enterprisesRepository: IEnterprisesRepository,

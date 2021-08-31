@@ -30,7 +30,7 @@ enterprisesRouter.get(
             is_active: Joi.boolean(),
         }
     }),
-    enterprisesController.getAllEnterprices,
+    enterprisesController.getAllEnterprises,
 );
 
 enterprisesRouter.post(
