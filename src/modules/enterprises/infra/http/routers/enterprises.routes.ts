@@ -89,4 +89,17 @@ enterprisesRouter.post(
     enterprisesController.linkUserWithEnterprise,
 )
 
+enterprisesRouter.post(
+    '/unlink-user-enterprise',
+    celebrate({
+        [Segments.BODY]: {
+            enterprise_id: Joi.string().uuid({ version: 'uuidv4' }).required(),
+            user_id: Joi.string().uuid({ version: 'uuidv4' }).required(),
+            profile_id: Joi.number().integer().positive().max(4).required(),
+
+        }
+    }),
+    enterprisesController.unlinkUserEnterprise,
+)
+
 export default enterprisesRouter;

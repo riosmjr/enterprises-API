@@ -4,3 +4,6 @@ export * from './GetEnterpriseByIdService';
 export * from './UpdateEnterprisesService';
 export * from './DeleteEnterpriseService';
 export * from './GetAllEnterprisesService';
+export * from './CreateLinkUserWithEnterpriseService';
+export * from './DeleteLinkUserWithEnterpriseService';
+export * from './GetLinkUserEnterpriseService';

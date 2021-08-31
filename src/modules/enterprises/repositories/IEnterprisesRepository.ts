@@ -16,4 +16,6 @@ export default interface IEnterprisesRepository {
     updateEnterprise(enterprise: Enterprise, data: IUpdateEnterpriseDTO): Promise<Enterprise>;
     deleteEnterprise(enterprise: Enterprise): Promise<Enterprise>;
     createLinkUserWithEnterprise(data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser>;
+    deleteLinkUserWithEnterprise(enterpriseUser: EnterpriseUser, data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser>;
+    findLinkUserWithEnterprise(data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser | undefined>;
 }

@@ -92,6 +92,16 @@ export class EnterpriseRepository implements IEnterprisesRepository {
         await this.ormRepository.getRepository(EnterpriseUser).save(linkUserWithEnterprise);
         return linkUserWithEnterprise;
     }
+
+    public async deleteLinkUserWithEnterprise(enterpriseUser: EnterpriseUser, data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser> {
+        const unlinkUserEnterprise = this.ormRepository.getRepository(EnterpriseUser).merge(enterpriseUser, {is_active: false, deleted_at: new Date()});
+        await this.ormRepository.getRepository(EnterpriseUser).save(unlinkUserEnterprise);
+        return unlinkUserEnterprise;
+    }
+
+    public async findLinkUserWithEnterprise(data: ICreateLinkUserWithEnterpriseDTO): Promise<EnterpriseUser | undefined> {
+        return await this.ormRepository.getRepository(EnterpriseUser).findOne(data);
+    }
 }
 
 export default EnterpriseRepository;
