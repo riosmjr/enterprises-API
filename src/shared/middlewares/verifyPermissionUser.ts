@@ -3,7 +3,7 @@ import {Request, Response, NextFunction} from 'express';
 import {container} from "tsyringe";
 import {GetUserService} from "../../modules/users/services";
 
-export default async function verifyPermission(
+export default async function verifyPermissionUser(
     request: Request,
     response: Response,
     next: NextFunction,

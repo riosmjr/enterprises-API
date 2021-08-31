@@ -3,7 +3,7 @@ import { celebrate, Segments, Joi } from 'celebrate';
 import UserController from "../controllers/UserController";
 import authentication from "../../../../../shared/middlewares/authentication";
 import verifyAdminPermission from "../../../../../shared/middlewares/verifyAdminPermission";
-import verifyPermission from "../../../../../shared/middlewares/verifyPermission";
+import verifyPermissionUser from "../../../../../shared/middlewares/verifyPermissionUser";
 
 const usersRouter = Router();
 const userController = new UserController();
@@ -16,7 +16,7 @@ usersRouter.get(
             user_id: Joi.string().uuid({ version: 'uuidv4' }).required()
         }
     }),
-    verifyPermission,
+    verifyPermissionUser,
     userController.getUserById,
 );
 
@@ -71,7 +71,7 @@ usersRouter.put(
             schooling_id: Joi.number().integer().positive().max(7),
         }
     }),
-    verifyPermission,
+    verifyPermissionUser,
     userController.updateUser,
 );
 

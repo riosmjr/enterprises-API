@@ -4,11 +4,11 @@ import { celebrate, Segments, Joi } from 'celebrate';
 import EnterprisesController from '../controllers/EnterprisesController';
 import authentication from "../../../../../shared/middlewares/authentication";
 import verifyAdminPermission from "../../../../../shared/middlewares/verifyAdminPermission";
-import usersRouter from "../../../../users/infra/http/routers/user.routes";
+import verifyPermissionEnterprise from "../../../../../shared/middlewares/verifyPermissionEnterprise";
 
 const enterprisesRouter = Router();
 const enterprisesController = new EnterprisesController();
-usersRouter.use(authentication);
+enterprisesRouter.use(authentication);
 
 enterprisesRouter.get(
     '/:enterprise_id',
@@ -17,6 +17,7 @@ enterprisesRouter.get(
             enterprise_id: Joi.string().uuid({ version: 'uuidv4' }).required()
         }
     }),
+    verifyPermissionEnterprise,
     enterprisesController.getEnterpriseById,
 );
 
@@ -68,6 +69,7 @@ enterprisesRouter.put(
             is_active: Joi.boolean(),
         },
     }),
+    verifyPermissionEnterprise,
     enterprisesController.updateEnterprise,
 );
 
