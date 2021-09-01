@@ -12,6 +12,7 @@ import {
 import {GetUserService} from "../../../../users/services";
 import AppError from "../../../../../shared/errors/AppError";
 import {CreateLinkUserWithEnterpriseService} from "../../../services";
+import {IFiltersGetAllEnterprisesUsersDTO} from "../../../dtos/IEnterpriseDTO";
 
 export default class EnterprisesController {
 
@@ -149,11 +150,10 @@ export default class EnterprisesController {
     }
 
     public async getAllLinkEnterprisesUsers(request: Request, response: Response): Promise<Response> {
-        const { enterprise_id } =  request.params;
-        const params  = request.query;
+        const params = request.query;
 
         const getLinkEnterprisesUsers = container.resolve(GetAllLinkEnterprisesUsers);
-        const linkEnterpriseUser = await getLinkEnterprisesUsers.execute(params, enterprise_id);
+        const linkEnterpriseUser = await getLinkEnterprisesUsers.execute(params, request);
 
         return response.json(classToClass(linkEnterpriseUser));
     }

@@ -1,3 +1,5 @@
+import {IFiltersGetAllUsersDTO} from "../../users/dtos/IUserDTO";
+
 export interface ICreateEnterpriseDTO {
     name: string;
     occupation_area: string;
@@ -30,4 +32,8 @@ export interface ICreateLinkUserWithEnterpriseDTO {
     user_id: uuid;
     enterprise_id: uuid;
     profile_id: interger;
+}
+
+export interface IFiltersGetAllEnterprisesUsersDTO extends IFiltersGetAllUsersDTO{
+    enterprise_id?: uuid;
 }

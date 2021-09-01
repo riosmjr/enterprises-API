@@ -4,9 +4,10 @@ import AppError from '../../../shared/errors/AppError';
 
 import IEnterprisesRepository from "../repositories/IEnterprisesRepository";
 
-import {IFiltersGetAllUsersDTO} from "../../users/dtos/IUserDTO";
-
 import Users from "../../users/infra/typeorm/entities/Users";
+
+import {IFiltersGetAllEnterprisesUsersDTO} from "../dtos/IEnterpriseDTO";
+import {Request} from "express";
 
 @injectable()
 export class GetAllLinkEnterprisesUsers {
@@ -15,8 +16,8 @@ export class GetAllLinkEnterprisesUsers {
         private enterprisesRepository: IEnterprisesRepository,
     ) {}
 
-    public async execute(filters: IFiltersGetAllUsersDTO, enterprise_id: string): Promise<Users[] | undefined> {
-        const linkEnterprisesUsers = await this.enterprisesRepository.findAllLinkEnterprisesUsers(filters, enterprise_id);
+    public async execute(filters: IFiltersGetAllEnterprisesUsersDTO, request: Request): Promise<Users[] | undefined> {
+        const linkEnterprisesUsers = await this.enterprisesRepository.findAllLinkEnterprisesUsers(filters, request);
 
         if (!linkEnterprisesUsers) {
             throw new AppError('No enterprise found', 404);

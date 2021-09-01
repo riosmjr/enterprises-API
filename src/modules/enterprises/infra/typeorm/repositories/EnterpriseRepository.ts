@@ -7,13 +7,15 @@ import {
     ICreateEnterpriseDTO,
     ICreateLinkUserWithEnterpriseDTO,
     IFiltersGetAllEnterprisesDTO,
+    IFiltersGetAllEnterprisesUsersDTO,
     IUpdateEnterpriseDTO
 } from "../../../dtos/IEnterpriseDTO";
 
 import User from "../../../../users/infra/typeorm/entities/Users";
 import {format} from "date-fns";
-import {IFiltersGetAllUsersDTO, IGetUserDTO} from "../../../../users/dtos/IUserDTO";
+import {IGetUserDTO} from "../../../../users/dtos/IUserDTO";
 import EnterpriseUser from "../entities/EnterpriseUser";
+import {Request} from "express";
 
 export class EnterpriseRepository implements IEnterprisesRepository {
     private ormRepository: Connection;
@@ -99,11 +101,11 @@ export class EnterpriseRepository implements IEnterprisesRepository {
         return unlinkUserEnterprise;
     }
 
-    public async findAllLinkEnterprisesUsers(filters: IFiltersGetAllUsersDTO, enterprise_id: string): Promise<User[] | undefined> {
+    public async findAllLinkEnterprisesUsers(filters: IFiltersGetAllEnterprisesUsersDTO, request: Request): Promise<User[] | undefined> {
         const query = this.ormRepository.getRepository(EnterpriseUser).createQueryBuilder('eu')
             .select('us')
             .innerJoin('users', 'us', 'us.user_id = eu.user_id')
-            .where(`eu.enterprise_id = '${enterprise_id}'`);
+            .where(`1 = 1`);
 
         if (filters.name) {
             query.andWhere(`us.name like '%${filters.name}%'`);
@@ -139,6 +141,10 @@ export class EnterpriseRepository implements IEnterprisesRepository {
 
         if (filters.profile_id) {
             query.andWhere(`eu.profile_id = ${filters.profile_id}`);
+        }
+
+        if ((request.user.profile_id === 2 || request.user.profile_id === 3) || filters.enterprise_id) {
+            query.andWhere(`eu.enterprise_id = '${filters.enterprise_id ? filters.enterprise_id : request.user.enterprise_id}'`);
         }
 
         return await query.getRawMany();
