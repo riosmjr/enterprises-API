@@ -103,8 +103,9 @@ export class EnterpriseRepository implements IEnterprisesRepository {
 
     public async findAllLinkEnterprisesUsers(filters: IFiltersGetAllEnterprisesUsersDTO, request: Request): Promise<User[] | undefined> {
         const query = this.ormRepository.getRepository(EnterpriseUser).createQueryBuilder('eu')
-            .select('us')
+            .select('us.*, en.name as enterprise')
             .innerJoin('users', 'us', 'us.user_id = eu.user_id')
+            .innerJoin('enterprises', 'en', 'en.enterprise_id = eu.enterprise_id')
             .where(`1 = 1`);
 
         if (filters.name) {
